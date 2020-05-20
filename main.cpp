@@ -7,12 +7,12 @@
 //******/******/******/******/******/******////******/******/******/******/******/******/******//
 
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <fstream>
 #include <vector>
 
 void sortFile();
-void readInStyleRules(const std::ofstream &fin);
+void readInStyleRules(std::fstream& fin, std::vector<std::string>& lines);
 
 std::string filePath;
 
@@ -33,11 +33,13 @@ int main() {
     std::cout << "Please enter the file path" << std::endl;
     std::cin >> filePath;
 
-    std::ofstream fin;
+    std::fstream fin;
+    std::vector<std::string> lines;
 
     fin.open(filePath);
 
-    readInStyleRules(fin);
+    // readInStyleRules(fin, lines);
+    readInStyleRules(fin, lines);
     
 
     if (!fin.is_open()) {
@@ -52,13 +54,20 @@ int main() {
     return 0;
 }
 
-void readInStyleRules(const std::ofstream &fin) {
+void readInStyleRules(std::fstream& fin, std::vector<std::string>& lines) {
+    //* Check if file is still opened
     if (!fin.is_open()) {
         std::cout << "In function couldnt open" << std::endl;
         return;
     };
 
     std::cout << "In function opened successfully" << std::endl;
+    std::string line;
+    while(!fin.eof()) {
+        std::getline(fin, line);
+        std::cout << line;
+    };
+
 }
 
 void sortFile() {
