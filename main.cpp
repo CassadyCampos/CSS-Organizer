@@ -1,7 +1,7 @@
 //******/******/******/******/******/******////******/******/******/******/******/******/******//
 //*                                                                                           *//
-//*    This script when given a .css file while organize the file to help developers          *//
-//*    organize their stylesheets.                                                            *//
+//*    This script when given a .css file will organize the file alphabetically               *//
+//*    to better help organization.                                                           *//
 //*                                                                                           *//
 //*     Cassady Campos 2020                                                                   *//
 //******/******/******/******/******/******////******/******/******/******/******/******/******//
