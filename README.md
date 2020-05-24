@@ -9,34 +9,3 @@ Am I solving a nonexistent-problem if you took the time to organize your stylesh
 Yes.
 
 But, why should I worry about these things. 
-
-Example:
-Original code: 
-
-.banana { 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: space-around;
-
-
-}
-.apple{
-
-    border: 1px solid red;
-    color: green;
-
-}
-
-After executing:
-
-.apple{
-    border: 1px solid red;
-    color: green;
-}
-.banana {
-    align-items: space-around;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
