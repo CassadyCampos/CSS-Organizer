@@ -1,10 +1,10 @@
+.apple {
+    border: 1px solid red;
+    color: green;
+}
 .banana {
     align-items: space-around;
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-.apple {
-    border: 1px solid red;
-    color: green;
 }
