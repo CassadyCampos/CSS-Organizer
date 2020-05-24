@@ -17,7 +17,11 @@
 
 void sortFile();
 void readInStyleRules(std::fstream& fin);
-void printRulings();
+void printRulings(std::fstream & fin);
+void sortRulings();
+bool compareFunction(std::string a, std::string b) {
+    return a < b;
+}
 
 
 std::string filePath;
@@ -36,7 +40,6 @@ std::vector<Ruling> rulings;
 
 int main() {
 
-
     //Lets ask for the css file
     std::cout << "Please enter the file path" << std::endl;
     std::cin >> filePath;
@@ -46,12 +49,15 @@ int main() {
 
     fin.open(filePath);
 
-    // readInStyleRules(fin, lines);
     readInStyleRules(fin);
 
-    std::cout << "After function" << std::endl;
-
-    printRulings();
+    // std::cout << "After function" << std::endl;
+    // std::cout << "Before sort" << std::endl;
+    // printRulings();
+    // std::cout << "After sort " << std::endl;
+    // sortRulings();
+    // printRulings();
+    printRulings(fin);
 
 
     fin.close();
@@ -71,9 +77,9 @@ void readInStyleRules(std::fstream& fin) {
     std::string line;
     std::vector<std::string> lines;
 
-    //* Create file for writing out
-    std::ofstream fout;
-    fout.open(tempFile, std::ios::out);
+    // //* Create file for writing out
+    // std::ofstream fout;
+    // fout.open(tempFile, std::ios::out);
 
     ruleType type;
 
@@ -134,29 +140,63 @@ void readInStyleRules(std::fstream& fin) {
         //*****************************************************************//
         
         //* If there is atleast 1 non whitespace character in the string
-        if (line.find_first_not_of(' ') != std::string::npos) {
-            fout << line << std::endl;
-        }
+        // if (line.find_first_not_of(' ') != std::string::npos) {
+        //     fout << line << std::endl;
+        // }
 
     }
+
+    // fout.close();
+    // //* Overwrite the file with our existing changes
+    // std::remove(filePath.c_str());
+    // std::rename(tempFile.c_str(), filePath.c_str());
+}
+
+// void sortRulings() {
+//     //* Sort each ruling seperately
+//     for (Ruling r : rulings) {
+//         std::cout << "before sort" << std::endl;
+//         for (std::string s : r.lines) {
+//             std::cout << s << std::endl;
+//         }
+    
+//         std::sort(r.lines.begin(), r.lines.end(), compareFunction);
+
+//         std::cout << "after sort" << std::endl;
+
+//         for (std::string s : r.lines) {
+//             std::cout << s << std::endl;
+//         }
+//     }
+// }
+
+void printRulings(std::fstream & fin) {
+    std::ofstream fout;
+    fout.open(tempFile, std::ios::out);
+
+
+        //* Check if file is still opened
+    if (!fout.is_open()) {
+        std::cout << "Could not open temp file" << std::endl;
+        return;
+    };
+
+    std::cout << "printRulings opened successfully" << std::endl;
+    for (Ruling r : rulings) {
+
+        //* Because we only want to sort the contents of the rule here,
+        //* we want to exclude the first and last lines of the rule. Hence
+        //* the +1/-1.
+        std::sort(r.lines.begin() + 1, r.lines.end() - 1, compareFunction);
+
+        for (std::string line : r.lines) {
+            fout << line << std::endl;
+        }
+    }
+    fout << "fuck" << std::endl;
 
     fout.close();
     //* Overwrite the file with our existing changes
     std::remove(filePath.c_str());
     std::rename(tempFile.c_str(), filePath.c_str());
-}
-
-void sortFile() {
-
-}
-
-void printRulings() {
-    for (Ruling r : rulings) {
-        std::cout << "type: " << r.type << std::endl;
-        for (std::string s : r.lines) {
-            std::cout << s  << std::endl;
-        }
-        std::cout << "****rule done****" << std::endl;
-    }
-    std::cout << "done " << std::endl;
 }
