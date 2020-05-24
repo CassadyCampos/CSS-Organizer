@@ -17,6 +17,8 @@
 
 void sortFile();
 void readInStyleRules(std::fstream& fin);
+void printRulings();
+
 
 std::string filePath;
 std::string tempFile = "temp.txt";
@@ -48,6 +50,8 @@ int main() {
     readInStyleRules(fin);
 
     std::cout << "After function" << std::endl;
+
+    printRulings();
 
 
     fin.close();
@@ -83,6 +87,7 @@ void readInStyleRules(std::fstream& fin) {
         // bool res = line.length() == 0;
         std::cout << "Comparing: :" << line << ": res:"  << res <<  std::endl;
         while (line.length() == 0) {
+            // if (fin.eof()) break;
             getline(fin, line);
         }
 
@@ -113,6 +118,7 @@ void readInStyleRules(std::fstream& fin) {
             lines.push_back(line);
             Ruling rule(type, lines);
             lines.clear();
+            rulings.push_back(rule);
             // break;
         } else {
             //* If there is atleast 1 non whitespace character in the string
@@ -120,9 +126,13 @@ void readInStyleRules(std::fstream& fin) {
                 lines.push_back(line);
             }
         }
-
         
-        //* Print back out our line
+        //*****************************************************************//
+        //*****************************************************************//
+        //******************// Print back out our line //******************//
+        //*****************************************************************//
+        //*****************************************************************//
+        
         //* If there is atleast 1 non whitespace character in the string
         if (line.find_first_not_of(' ') != std::string::npos) {
             fout << line << std::endl;
@@ -138,4 +148,15 @@ void readInStyleRules(std::fstream& fin) {
 
 void sortFile() {
 
+}
+
+void printRulings() {
+    for (Ruling r : rulings) {
+        std::cout << "type: " << r.type << std::endl;
+        for (std::string s : r.lines) {
+            std::cout << s  << std::endl;
+        }
+        std::cout << "****rule done****" << std::endl;
+    }
+    std::cout << "done " << std::endl;
 }
