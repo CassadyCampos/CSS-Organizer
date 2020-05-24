@@ -1,6 +1,6 @@
 .banana {
 }
 .apple {
-    color: 
-    green;
+    color: green;
+    border: 1px solid red;   
 }

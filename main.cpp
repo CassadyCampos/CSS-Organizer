@@ -77,6 +77,11 @@ void readInStyleRules(std::fstream& fin) {
     while(getline(fin, line)) {
         
         //* The line is blank - remove it
+        
+        // line.find_first_not_of(' ') != std::string::npos
+        bool res = line.find_first_not_of(' ') == std::string::npos;
+        // bool res = line.length() == 0;
+        std::cout << "Comparing: :" << line << ": res:"  << res <<  std::endl;
         while (line.length() == 0) {
             getline(fin, line);
         }
@@ -110,12 +115,18 @@ void readInStyleRules(std::fstream& fin) {
             lines.clear();
             // break;
         } else {
-            lines.push_back(line);
+            //* If there is atleast 1 non whitespace character in the string
+            if (line.find_first_not_of(' ') != std::string::npos) {
+                lines.push_back(line);
+            }
         }
 
         
         //* Print back out our line
-        fout << line << std::endl;
+        //* If there is atleast 1 non whitespace character in the string
+        if (line.find_first_not_of(' ') != std::string::npos) {
+            fout << line << std::endl;
+        }
 
     }
 
