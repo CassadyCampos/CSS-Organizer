@@ -36,6 +36,10 @@ struct Ruling {
     Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
 };
 
+bool compareRule(Ruling a, Ruling b) { 
+    return a.lines[1] < b.lines[1];
+}
+
 std::vector<Ruling> rulings;
 
 int main() {
@@ -51,12 +55,6 @@ int main() {
 
     readInStyleRules(fin);
 
-    // std::cout << "After function" << std::endl;
-    // std::cout << "Before sort" << std::endl;
-    // printRulings();
-    // std::cout << "After sort " << std::endl;
-    // sortRulings();
-    // printRulings();
     printRulings(fin);
 
 
@@ -146,29 +144,8 @@ void readInStyleRules(std::fstream& fin) {
 
     }
 
-    // fout.close();
-    // //* Overwrite the file with our existing changes
-    // std::remove(filePath.c_str());
-    // std::rename(tempFile.c_str(), filePath.c_str());
 }
 
-// void sortRulings() {
-//     //* Sort each ruling seperately
-//     for (Ruling r : rulings) {
-//         std::cout << "before sort" << std::endl;
-//         for (std::string s : r.lines) {
-//             std::cout << s << std::endl;
-//         }
-    
-//         std::sort(r.lines.begin(), r.lines.end(), compareFunction);
-
-//         std::cout << "after sort" << std::endl;
-
-//         for (std::string s : r.lines) {
-//             std::cout << s << std::endl;
-//         }
-//     }
-// }
 
 void printRulings(std::fstream & fin) {
     std::ofstream fout;
@@ -180,6 +157,8 @@ void printRulings(std::fstream & fin) {
         std::cout << "Could not open temp file" << std::endl;
         return;
     };
+
+    std::sort(rulings.begin(), rulings.end(), compareRule);
 
     std::cout << "printRulings opened successfully" << std::endl;
     for (Ruling r : rulings) {
@@ -193,7 +172,6 @@ void printRulings(std::fstream & fin) {
             fout << line << std::endl;
         }
     }
-    fout << "fuck" << std::endl;
 
     fout.close();
     //* Overwrite the file with our existing changes
