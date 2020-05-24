@@ -1,4 +1,4 @@
-CSS Stylesheet Organizer: Keep your external stylesheet clean files with this C++ script. 
+CSS Stylesheet Organizer: Keep your external stylesheet files clean with this C++ script. 
 
 Could I have spent the time it took to write this organizing my CSS files instead? 
 
