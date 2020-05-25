@@ -1,7 +1,7 @@
 //******/******/******/******/******/******////******/******/******/******/******/******/******//
 //*                                                                                           *//
-//*    This script when given a .css file will organize the file alphabetically               *//
-//*    to better help organization.                                                           *//
+//*    This script when given a directory will organize stylesheets within the file           *//
+//*    to better help developers with organization.                                           *//
 //*                                                                                           *//
 //*     Cassady Campos 2020                                                                   *//
 //******/******/******/******/******/******////******/******/******/******/******/******/******//
@@ -53,23 +53,22 @@ int main() {
     std::cin >> directory;
 
     fs::create_directories(directory);
-    for(auto& p: fs::recursive_directory_iterator(directory))
-        std::cout << p.path() << std::endl;
+    for(auto& p: fs::recursive_directory_iterator(directory)) {
+
+        // std::cout << p.path() << std::endl;
+
+            std::fstream fin;
+            filePath = p.path();
+            fin.open(filePath);
+            readInStyleRules(fin);
+            printRulings(fin);
+            fin.close();
+
+    }
     
-    fs::remove_all(directory);
 
-    std::fstream fin;
-
-
-    fin.open(filePath);
-
-    readInStyleRules(fin);
-
-    printRulings(fin);
-
-
-    fin.close();
-    
+    //* Uncomment incase u want to delete everything in the directory
+    // fs::remove_all(directory);
 
     return 0;
 }
