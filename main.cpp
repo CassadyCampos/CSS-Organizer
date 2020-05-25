@@ -13,6 +13,11 @@
 #include <algorithm>
 #include <stdio.h>
 #include <sstream>
+#include <experimental/filesystem>
+
+#include <filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 
 void sortFile();
@@ -23,15 +28,14 @@ bool compareFunction(std::string a, std::string b) {
     return a < b;
 }
 
-
-std::string filePath;
+std::string directory;
+std::string filePath = "";
 std::string tempFile = "temp.txt";
 
 enum ruleType {Id = 0, Class};
 
 struct Ruling {
     ruleType type;
-    // int numberOfLines;
     std::vector<std::string> lines;
     Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
 };
@@ -44,9 +48,15 @@ std::vector<Ruling> rulings;
 
 int main() {
 
-    //Lets ask for the css file
-    std::cout << "Please enter the file path" << std::endl;
-    std::cin >> filePath;
+    //* Get the directory 
+    std::cout << "Please enter the directory" << std::endl;
+    std::cin >> directory;
+
+    fs::create_directories(directory);
+    for(auto& p: fs::recursive_directory_iterator(directory))
+        std::cout << p.path() << std::endl;
+    
+    fs::remove_all(directory);
 
     std::fstream fin;
 
