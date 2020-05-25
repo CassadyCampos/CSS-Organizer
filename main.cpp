@@ -31,7 +31,7 @@ bool compareFunction(std::string a, std::string b) {
 std::string directory;
 std::string filePath = "";
 std::string tempFile = "temp.txt";
-
+const std::string CSS = "css";
 enum ruleType {Id = 0, Class};
 
 struct Ruling {
@@ -55,14 +55,24 @@ int main() {
     fs::create_directories(directory);
     for(auto& p: fs::recursive_directory_iterator(directory)) {
 
-        // std::cout << p.path() << std::endl;
+        std::cout << p.path() << std::endl;
+        rulings.clear();
 
+        //* We need to make sure it is a css file
+        //* TODO - We can extend this to other stylesheets such as scss
+        std::string path = p.path();
+        // std::string fileExt = path.substr(path.find_last_of("." + 1));
+        
+        // if (fileExt == CSS) {
+            
             std::fstream fin;
             filePath = p.path();
             fin.open(filePath);
             readInStyleRules(fin);
             printRulings(fin);
             fin.close();
+        // }
+
 
     }
     
