@@ -20,6 +20,12 @@
 namespace fs = std::experimental::filesystem;
 
 enum ruleType {Id = 0, Class};
+
+struct Property {
+    std::string property;
+    std::vector<std::string> values;
+};
+
 struct Ruling {
     ruleType type;
     std::vector<std::string> lines;
