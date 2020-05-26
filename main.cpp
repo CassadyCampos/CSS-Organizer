@@ -19,6 +19,12 @@
 
 namespace fs = std::experimental::filesystem;
 
+enum ruleType {Id = 0, Class};
+struct Ruling {
+    ruleType type;
+    std::vector<std::string> lines;
+    Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
+};
 
 void sortFile();
 void readInStyleRules(std::fstream& fin);
@@ -27,22 +33,15 @@ void sortRulings();
 bool compareFunction(std::string a, std::string b) {
     return a < b;
 }
+bool compareRule(Ruling a, Ruling b) { 
+    return a.lines[1] < b.lines[1];
+}
 
 std::string directory;
 std::string filePath = "";
 std::string tempFile = "temp.txt";
 const std::string CSS = "css";
-enum ruleType {Id = 0, Class};
 
-struct Ruling {
-    ruleType type;
-    std::vector<std::string> lines;
-    Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
-};
-
-bool compareRule(Ruling a, Ruling b) { 
-    return a.lines[1] < b.lines[1];
-}
 
 std::vector<Ruling> rulings;
 
@@ -54,63 +53,44 @@ int main() {
 
     fs::create_directories(directory);
     for(auto& p: fs::recursive_directory_iterator(directory)) {
-
-        std::cout << p.path() << std::endl;
         rulings.clear();
 
         //* We need to make sure it is a css file
         //* TODO - We can extend this to other stylesheets such as scss
         std::string path = p.path();
-        // std::string fileExt = path.substr(path.find_last_of("." + 1));
-        
-        // if (fileExt == CSS) {
-            
+        std::string fileExt = path.substr(path.find_last_of(".")+ 1);
+        std::cout << path << ". . . . . . . . . . . . . . ";
+        if (fileExt == CSS) {
             std::fstream fin;
             filePath = p.path();
             fin.open(filePath);
             readInStyleRules(fin);
             printRulings(fin);
             fin.close();
-        // }
-
-
+            std::cout << "done" << std::endl;
+        } else {
+            std::cout << "skipped" << std::endl;
+        }
     }
     
-
-    //* Uncomment incase u want to delete everything in the directory
-    // fs::remove_all(directory);
-
     return 0;
 }
 
 void readInStyleRules(std::fstream& fin) {
+
     //* Check if file is still opened
     if (!fin.is_open()) {
         std::cout << "Could not open file" << std::endl;
         return;
     };
 
-    std::cout << "In function opened successfully" << std::endl;
     std::string line;
     std::vector<std::string> lines;
-
-    // //* Create file for writing out
-    // std::ofstream fout;
-    // fout.open(tempFile, std::ios::out);
-
     ruleType type;
 
 
     while(getline(fin, line)) {
-        
-        //* The line is blank - remove it
-        
-        // line.find_first_not_of(' ') != std::string::npos
-        bool res = line.find_first_not_of(' ') == std::string::npos;
-        // bool res = line.length() == 0;
-        std::cout << "Comparing: :" << line << ": res:"  << res <<  std::endl;
         while (line.length() == 0) {
-            // if (fin.eof()) break;
             getline(fin, line);
         }
 
@@ -131,47 +111,26 @@ void readInStyleRules(std::fstream& fin) {
             type = ruleType::Id;
         } 
 
-        // //* print out tokens
-        // for (int i = 0; i < tokens.size(); i++) {
-        //     std::cout << tokens[i] << " " << std::endl;
-        // } 
-
         //* We are at the end of the rule here
         if (tokens.begin()[0] == "}") {
             lines.push_back(line);
             Ruling rule(type, lines);
             lines.clear();
             rulings.push_back(rule);
-            // break;
         } else {
             //* If there is atleast 1 non whitespace character in the string
             if (line.find_first_not_of(' ') != std::string::npos) {
                 lines.push_back(line);
             }
         }
-        
-        //*****************************************************************//
-        //*****************************************************************//
-        //******************// Print back out our line //******************//
-        //*****************************************************************//
-        //*****************************************************************//
-        
-        //* If there is atleast 1 non whitespace character in the string
-        // if (line.find_first_not_of(' ') != std::string::npos) {
-        //     fout << line << std::endl;
-        // }
-
     }
-
 }
-
 
 void printRulings(std::fstream & fin) {
     std::ofstream fout;
     fout.open(tempFile, std::ios::out);
 
-
-        //* Check if file is still opened
+    //* Check if file is still opened
     if (!fout.is_open()) {
         std::cout << "Could not open temp file" << std::endl;
         return;
@@ -179,7 +138,6 @@ void printRulings(std::fstream & fin) {
 
     std::sort(rulings.begin(), rulings.end(), compareRule);
 
-    std::cout << "printRulings opened successfully" << std::endl;
     for (Ruling r : rulings) {
 
         //* Because we only want to sort the contents of the rule here,
