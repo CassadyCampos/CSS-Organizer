@@ -1,15 +1,17 @@
 .apple { 
 
-    color: green ;
-    border: 1px solid red ;
+    border: 1px solid red;
+    color: green;
 
 }
+
 .banana { 
 
-    display: flex ;
-    font-weight: 700 ;
-    margin: 1px 2px ;
-    padding: 4px ;
-    justify-content: space-around ;
+    display: flex;
+    font-weight: 700;
+    justify-content: space-around;
+    margin: 1px 2px;
+    padding: 4px;
 
 }
+

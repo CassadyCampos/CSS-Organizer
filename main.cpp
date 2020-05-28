@@ -181,10 +181,18 @@ void printRulings(std::fstream & fin) {
 
         for (Property p : r.properties) {
             fout << p.property << ": ";
-            for (std::string s : p.values) {
-                fout << s << " "; 
+            // for (std::string s : p.values) {
+            //     fout << s << " "; 
+            // }
+            for (int i = 0; i < p.values.size(); i++) {
+                if (i < p.values.size() - 1) {
+                    fout << p.values[i] << " ";
+                } else {
+                    fout << p.values[i] << ";" << std::endl;
+                }
+                // if (i == p.values.size() - 1) fout << ";\n";
             }
-            fout << ";\n";
+            // fout << ";\n";
         }
         fout << "\n}\n";
         fout << std::endl;
