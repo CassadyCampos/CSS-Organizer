@@ -18,5 +18,4 @@ Keep your external stylesheet files clean with this C++ script.
  Please make sure to update documentation as appropriate.
 
 ## License
-[MIT]
-(https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)
