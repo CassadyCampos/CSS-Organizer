@@ -21,8 +21,8 @@ class Ruling {
         void sortProperties();
 
     private: 
-        std::vector<Property> properties;
         std::string name;
+        std::vector<Property> properties;
 
 };
 

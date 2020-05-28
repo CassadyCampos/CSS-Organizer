@@ -1,28 +1,24 @@
-.data-number   { 
+.data-number {
     color: #fff;
     font-size: 32px;
 }
 
-.date-time   { 
+.date-time {
     font-size: 12px;
     color: var(--text-color);
 }
 
-.fatality-text   { 
-    color: #ff0000;
-}
-
-.page-title   { 
+.page-title {
     color: var(--text-color);
 }
 
-:root   { 
+:root {
     --background-color: #1f2935;
-    --primary-color: #455363;
     --text-color: #fff;
+    --primary-color: #455363;
 }
 
-h3   { 
+h3 {
     color : green;
 }
 

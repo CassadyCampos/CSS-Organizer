@@ -1,9 +1,9 @@
-.apple   { 
+.apple   {
     border: 1px solid red;
     color: green;
 }
 
-.banana   { 
+.banana   {
     display: flex;
     font-weight: 700;
     justify-content: space-around;
