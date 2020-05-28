@@ -17,7 +17,7 @@
 
 #include <filesystem>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 enum ruleType {Id = 0, Class};
 
@@ -105,9 +105,11 @@ void readInStyleRules(std::fstream& fin) {
     ruleType type;
     std::string ruleName;
 
-
-    while(getline(fin, line)) {
+    while(!fin.eof()) {
+    // while(getline(fin, line)) {
+        getline(fin, line);
         while (line.length() == 0) {
+            if (fin.eof()) return;
             getline(fin, line);
         }
 
@@ -129,6 +131,7 @@ void readInStyleRules(std::fstream& fin) {
             //* skip to next line basically
             getline(fin, line);
             while(line.length() == 0) {
+                if (fin.eof()) return;
                 getline(fin, line);
             }
         } 
