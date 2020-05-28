@@ -41,7 +41,7 @@ struct Ruling {
 
 void sortFile();
 void readInStyleRules(std::fstream& fin);
-void printRulings(std::fstream & fin);
+void printRulings();
 void sortRulings();
 std::string ruleType_ToString(ruleType rt);
 
@@ -80,7 +80,7 @@ int main() {
             filePath = p.path();
             fin.open(filePath);
             readInStyleRules(fin);
-            printRulings(fin);
+            printRulings();
             fin.close();
             std::cout << "done" << std::endl;
         } else {
@@ -104,6 +104,8 @@ void readInStyleRules(std::fstream& fin) {
     std::vector<Property> properties;
     ruleType type;
     std::string ruleName;
+    bool isReading = false;
+
 
     while(!fin.eof()) {
     // while(getline(fin, line)) {
@@ -119,14 +121,28 @@ void readInStyleRules(std::fstream& fin) {
         std::string intermediate;
 
         //* Tokenizing by space ' ' 
-        while (getline(check1, intermediate, ' ')) {
-            tokens.push_back(intermediate);
+        if (isReading) { 
+            while(getline(check1, intermediate, ' ')) {
+                tokens.push_back(intermediate);
+            } 
+        } else {
+            while (getline(check1, intermediate, '{')) {
+                tokens.push_back(intermediate);
+            }
         }
 
-        if (tokens.begin()[0][0] == '.' || tokens.begin()[0][0] == '#') {
-            ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
-            tokens.begin()[0] == "." ? type = ruleType::Class : 
-            type = ruleType::Id;
+        // if (tokens.begin()[0][0] == '.' || tokens.begin()[0][0] == '#') {
+
+        //* Try to start reading rule
+        if (isReading == false) {
+            isReading = true;
+            // std::cout << tokens[0] << std::endl;
+            // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
+            ruleName = tokens[0];
+            // std::cout 
+            type = ruleType::Class;
+            // tokens.begin()[0] == "." ? type = ruleType::Class : 
+            // type = ruleType::Id;
 
             //* skip to next line basically
             getline(fin, line);
@@ -141,6 +157,7 @@ void readInStyleRules(std::fstream& fin) {
             Ruling rule(type, ruleName, properties);
             properties.clear();
             rulings.push_back(rule);
+            isReading = false;
         } else {
             //* If there is atleast 1 non whitespace character in the string
             if (line.find_first_not_of(' ') != std::string::npos) {
@@ -161,7 +178,7 @@ void readInStyleRules(std::fstream& fin) {
     }
 }
 
-void printRulings(std::fstream & fin) {
+void printRulings() {
     std::ofstream fout;
     fout.open(tempFile, std::ios::out);
 
@@ -173,32 +190,28 @@ void printRulings(std::fstream & fin) {
 
     std::sort(rulings.begin(), rulings.end(), compareRule);
 
-    int count = 0;
     for (Ruling r : rulings) {
         //* Because we only want to sort the contents of the rule here,
         //* we want to exclude the first and last lines of the rule. Hence
         // * the +1/-1.
-        std::string ruleType = ruleType_ToString(r.type);
-        fout << ruleType << r.name << " { " << std::endl << std::endl; 
         std::sort(r.properties.begin(), r.properties.end() - 1, compareProperties);
+        // r.print();
+        // std::string ruleType = ruleType_ToString(r.type);
+        // fout << r.name << " { " << std::endl; 
 
-        for (Property p : r.properties) {
-            fout << p.property << ": ";
-            // for (std::string s : p.values) {
-            //     fout << s << " "; 
-            // }
-            for (int i = 0; i < p.values.size(); i++) {
-                if (i < p.values.size() - 1) {
-                    fout << p.values[i] << " ";
-                } else {
-                    fout << p.values[i] << ";" << std::endl;
-                }
-                // if (i == p.values.size() - 1) fout << ";\n";
-            }
-            // fout << ";\n";
-        }
-        fout << "\n}\n";
-        fout << std::endl;
+        // for (Property p : r.properties) {
+        //     fout << p.property << ": ";
+
+        //     for (unsigned int i = 0; i < p.values.size(); i++) {
+        //         if (i < p.values.size() - 1) {
+        //             fout << p.values[i] << " ";
+        //         } else {
+        //             fout << p.values[i] << ";" << std::endl;
+        //         }
+        //     }
+        // }
+        // fout << "}" << std::endl;
+        // fout << std::endl;
     }
 
     fout.close();

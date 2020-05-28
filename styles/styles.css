@@ -1,7 +1,28 @@
-.apple { 
+.data-number   { 
+    color: #fff;
+    font-size: 32px;
+}
 
-    color: black;
-    border: 1px solid;
+.date-time   { 
+    font-size: 12px;
+    color: var(--text-color);
+}
 
+.fatality-text   { 
+    color: #ff0000;
+}
+
+.page-title   { 
+    color: var(--text-color);
+}
+
+:root   { 
+    --background-color: #1f2935;
+    --primary-color: #455363;
+    --text-color: #fff;
+}
+
+h3   { 
+    color : green;
 }
 
