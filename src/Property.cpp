@@ -1,4 +1,4 @@
-#include "include/Property.hpp";
+#include <Property.hpp>
 
 std::string Property::getName() {
     return name;

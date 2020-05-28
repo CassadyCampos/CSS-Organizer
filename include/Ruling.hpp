@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <sstream>
 
-#include "Property.hpp";
+#include <Property.hpp>
 
 class Ruling {
 
@@ -18,6 +18,7 @@ class Ruling {
         std::string getName();
         std::vector<Property> getProperties();
         void print(std::ofstream & fout);
+        void sortProperties();
 
     private: 
         std::vector<Property> properties;

@@ -1,4 +1,8 @@
-#include "include/Ruling.hpp";
+#include <Ruling.hpp>
+
+bool compareProperties(Property a, Property b) {
+    return a.getName() < b.getName();
+}
 
 std::string Ruling::getName() {
     return name;
@@ -11,7 +15,7 @@ std::vector<Property> Ruling::getProperties() {
 void Ruling::print(std::ofstream & fout) {
     std::string tempFile = "temp.txt";
 
-    fout << name << " {" << std::endl;
+    fout << name << "{" << std::endl;
     
     for (Property p : properties) {
         fout << p.getName() << ": ";
@@ -26,4 +30,11 @@ void Ruling::print(std::ofstream & fout) {
     }
     fout << "}" << std::endl;
     fout << std::endl;
+}
+
+void Ruling::sortProperties() {
+    //* Because we only want to sort the contents of the rule here,
+    //* we want to exclude the first and last lines of the rule. Hence
+    // * the +1/-1.
+    std::sort(properties.begin(), properties.end() - 1, compareProperties); 
 }
