@@ -116,26 +116,17 @@ void readInStyleRules(std::fstream& fin) {
         std::stringstream check1(line);
         std::string intermediate;
 
-        bool readingRule = false;
-
-
         //* Tokenizing by space ' ' 
         while (getline(check1, intermediate, ' ')) {
             tokens.push_back(intermediate);
         }
-        std::cout << "test: " << tokens.begin()[0][0] << " " << (tokens.begin()[0][0] == '.') << std:: endl;
+
         if (tokens.begin()[0][0] == '.' || tokens.begin()[0][0] == '#') {
-            std::cout << "name: " << tokens.begin()[0].substr(tokens.begin()[0].find('.')+1) << std::endl;
             ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
             tokens.begin()[0] == "." ? type = ruleType::Class : 
             type = ruleType::Id;
 
-            // std::stringstream name(tokens.begin()[0]);
-
-            // getline(name, ruleName, '.');
-
-
-            // continue; //* skip to next line basically
+            //* skip to next line basically
             getline(fin, line);
             while(line.length() == 0) {
                 getline(fin, line);
@@ -144,12 +135,6 @@ void readInStyleRules(std::fstream& fin) {
 
         //* We are at the end of the rule here
         if (line == "}") {
-            // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
-            std::cout << " TOKENS: " << std::endl;
-            for (std::string token : tokens) {
-                std::cout << token << std::endl;
-            }
-            std::cout << "tokens end " << std::endl;
             Ruling rule(type, ruleName, properties);
             properties.clear();
             rulings.push_back(rule);
@@ -160,19 +145,14 @@ void readInStyleRules(std::fstream& fin) {
                 std::vector<std::string> propValues;
 
                 std::string propName = line.substr(0, line.find(':'));
-                // std::cout << "propName: " << propName << std::endl;
                 std::stringstream ss(line.substr(line.find(':') + 1, line.length() - propName.length() - 2));
                 std::string propertyValue;
+
                 while (ss >> propertyValue) { 
-                    std::cout << propertyValue << std::endl;
                     propValues.push_back(propertyValue);
                 }
                 Property prop(propName, propValues);
                 properties.push_back(prop);
-
-                // std::cout << "length: " << line.length() - propName.length() - 2 << std::endl;
-                // std::cout << line.substr(line.find(':') + 1, line.length() - propName.length() - 2) << std::endl;
-
             }
         }
     }
@@ -190,13 +170,12 @@ void printRulings(std::fstream & fin) {
 
     std::sort(rulings.begin(), rulings.end(), compareRule);
 
+    int count = 0;
     for (Ruling r : rulings) {
         //* Because we only want to sort the contents of the rule here,
         //* we want to exclude the first and last lines of the rule. Hence
         // * the +1/-1.
-        // fout << r.name << " {" << std::endl;
         std::string ruleType = ruleType_ToString(r.type);
-        std::cout << "name: " << ruleType << r.name << std::endl;
         fout << ruleType << r.name << " { " << std::endl << std::endl; 
         std::sort(r.properties.begin(), r.properties.end() - 1, compareProperties);
 
@@ -208,6 +187,7 @@ void printRulings(std::fstream & fin) {
             fout << ";\n";
         }
         fout << "\n}\n";
+        fout << std::endl;
     }
 
     fout.close();
