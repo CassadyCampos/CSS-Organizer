@@ -1,11 +1,22 @@
-CSS Stylesheet Organizer: Keep your external stylesheet files clean with this C++ script. 
+# CSS Stylesheet Organizer
 
-Could I have spent the time it took to write this organizing my CSS files instead? 
+Keep your external stylesheet files clean with this C++ script. 
 
-Yes.
+## Installation
 
-Am I solving a nonexistent-problem if you took the time to organize your stylesheets as you created them? 
+ 1. Clone repo
+ 2. Using console, write "make run". This executes the Makefile that will compile the script
+ 3. You will be prompted to give the path to your directory containing the stylesheets.
+ 4. Done, let the script do its work!
+ 
+ ## Usage
+ 
+ ## Contributing
+ 
+ Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+ 
+ Please make sure to update documentation as appropriate.
 
-Yes.
-
-But, why should I worry about these things. 
+## License
+[MIT]
+(https://choosealicense.com/licenses/mit/)
