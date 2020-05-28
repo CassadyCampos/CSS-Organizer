@@ -103,6 +103,7 @@ void readInStyleRules(std::fstream& fin) {
     // std::vector<std::string> lines;
     std::vector<Property> properties;
     ruleType type;
+    std::string ruleName;
 
 
     while(getline(fin, line)) {
@@ -114,7 +115,7 @@ void readInStyleRules(std::fstream& fin) {
         std::vector<std::string> tokens;
         std::stringstream check1(line);
         std::string intermediate;
-        std::string ruleName;
+
         bool readingRule = false;
 
 
@@ -122,16 +123,10 @@ void readInStyleRules(std::fstream& fin) {
         while (getline(check1, intermediate, ' ')) {
             tokens.push_back(intermediate);
         }
-
-
-        // //* If first token belongs to class to has an id
-        // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
-
-
+        std::cout << "test: " << tokens.begin()[0][0] << " " << (tokens.begin()[0][0] == '.') << std:: endl;
         if (tokens.begin()[0][0] == '.' || tokens.begin()[0][0] == '#') {
-            
+            std::cout << "name: " << tokens.begin()[0].substr(tokens.begin()[0].find('.')+1) << std::endl;
             ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
-            std::cout << "ruleName:" << ruleName << std::endl;
             tokens.begin()[0] == "." ? type = ruleType::Class : 
             type = ruleType::Id;
 
@@ -140,14 +135,21 @@ void readInStyleRules(std::fstream& fin) {
             // getline(name, ruleName, '.');
 
 
-            continue; //* skip to next line basically
+            // continue; //* skip to next line basically
+            getline(fin, line);
+            while(line.length() == 0) {
+                getline(fin, line);
+            }
         } 
 
         //* We are at the end of the rule here
         if (line == "}") {
             // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
-
-            // std::cout << "ruleName:" << ruleName << std::endl;
+            std::cout << " TOKENS: " << std::endl;
+            for (std::string token : tokens) {
+                std::cout << token << std::endl;
+            }
+            std::cout << "tokens end " << std::endl;
             Ruling rule(type, ruleName, properties);
             properties.clear();
             rulings.push_back(rule);
@@ -195,7 +197,7 @@ void printRulings(std::fstream & fin) {
         // fout << r.name << " {" << std::endl;
         std::string ruleType = ruleType_ToString(r.type);
         std::cout << "name: " << ruleType << r.name << std::endl;
-        fout << ruleType << r.name << std::endl;
+        fout << ruleType << r.name << " { " << std::endl << std::endl; 
         std::sort(r.properties.begin(), r.properties.end() - 1, compareProperties);
 
         for (Property p : r.properties) {
@@ -220,6 +222,7 @@ std::string ruleType_ToString(ruleType rt) {
     } else if (rt == 1) {
         return "#";
     }
-    
     std::cerr << "Error, unknown ruleType: " << rt << std::endl;
+
+    return "Error";
 }
