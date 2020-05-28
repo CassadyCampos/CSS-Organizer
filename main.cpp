@@ -24,23 +24,32 @@ enum ruleType {Id = 0, Class};
 struct Property {
     std::string property;
     std::vector<std::string> values;
+    Property (std::string p, std::vector<std::string> v) : property(p), values(v) {}
 };
 
 struct Ruling {
     ruleType type;
-    std::vector<std::string> lines;
-    Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
+    // std::vector<std::string> lines;
+    std::string name;
+    std::vector<Property> properties;
+    // Ruling(ruleType t, std::vector<std::string> l) : type(t) , lines(l) {}
+    Ruling(ruleType t, std::string n, std::vector<Property> p) : type(t) , name(n), properties(p) {}
+
 };
+
+
 
 void sortFile();
 void readInStyleRules(std::fstream& fin);
 void printRulings(std::fstream & fin);
 void sortRulings();
-bool compareFunction(std::string a, std::string b) {
-    return a < b;
+std::string ruleType_ToString(ruleType rt);
+
+bool compareProperties(Property a, Property b) {
+    return a.property < b.property;
 }
 bool compareRule(Ruling a, Ruling b) { 
-    return a.lines[1] < b.lines[1];
+    return a.name < b.name;
 }
 
 std::string directory;
@@ -91,7 +100,8 @@ void readInStyleRules(std::fstream& fin) {
     };
 
     std::string line;
-    std::vector<std::string> lines;
+    // std::vector<std::string> lines;
+    std::vector<Property> properties;
     ruleType type;
 
 
@@ -104,6 +114,8 @@ void readInStyleRules(std::fstream& fin) {
         std::vector<std::string> tokens;
         std::stringstream check1(line);
         std::string intermediate;
+        std::string ruleName;
+        bool readingRule = false;
 
 
         //* Tokenizing by space ' ' 
@@ -111,22 +123,54 @@ void readInStyleRules(std::fstream& fin) {
             tokens.push_back(intermediate);
         }
 
+
         // //* If first token belongs to class to has an id
-        if (tokens.begin()[0] == "." || tokens.begin()[0] == "#") {
+        // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
+
+
+        if (tokens.begin()[0][0] == '.' || tokens.begin()[0][0] == '#') {
+            
+            ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
+            std::cout << "ruleName:" << ruleName << std::endl;
             tokens.begin()[0] == "." ? type = ruleType::Class : 
             type = ruleType::Id;
+
+            // std::stringstream name(tokens.begin()[0]);
+
+            // getline(name, ruleName, '.');
+
+
+            continue; //* skip to next line basically
         } 
 
         //* We are at the end of the rule here
-        if (tokens.begin()[0] == "}") {
-            lines.push_back(line);
-            Ruling rule(type, lines);
-            lines.clear();
+        if (line == "}") {
+            // ruleName = tokens.begin()[0].substr(tokens.begin()[0].find('.')+1);
+
+            // std::cout << "ruleName:" << ruleName << std::endl;
+            Ruling rule(type, ruleName, properties);
+            properties.clear();
             rulings.push_back(rule);
         } else {
             //* If there is atleast 1 non whitespace character in the string
             if (line.find_first_not_of(' ') != std::string::npos) {
-                lines.push_back(line);
+                //* Split line up so we can turn it into a property
+                std::vector<std::string> propValues;
+
+                std::string propName = line.substr(0, line.find(':'));
+                // std::cout << "propName: " << propName << std::endl;
+                std::stringstream ss(line.substr(line.find(':') + 1, line.length() - propName.length() - 2));
+                std::string propertyValue;
+                while (ss >> propertyValue) { 
+                    std::cout << propertyValue << std::endl;
+                    propValues.push_back(propertyValue);
+                }
+                Property prop(propName, propValues);
+                properties.push_back(prop);
+
+                // std::cout << "length: " << line.length() - propName.length() - 2 << std::endl;
+                // std::cout << line.substr(line.find(':') + 1, line.length() - propName.length() - 2) << std::endl;
+
             }
         }
     }
@@ -145,19 +189,37 @@ void printRulings(std::fstream & fin) {
     std::sort(rulings.begin(), rulings.end(), compareRule);
 
     for (Ruling r : rulings) {
-
         //* Because we only want to sort the contents of the rule here,
         //* we want to exclude the first and last lines of the rule. Hence
-        //* the +1/-1.
-        std::sort(r.lines.begin() + 1, r.lines.end() - 1, compareFunction);
+        // * the +1/-1.
+        // fout << r.name << " {" << std::endl;
+        std::string ruleType = ruleType_ToString(r.type);
+        std::cout << "name: " << ruleType << r.name << std::endl;
+        fout << ruleType << r.name << std::endl;
+        std::sort(r.properties.begin(), r.properties.end() - 1, compareProperties);
 
-        for (std::string line : r.lines) {
-            fout << line << std::endl;
+        for (Property p : r.properties) {
+            fout << p.property << ": ";
+            for (std::string s : p.values) {
+                fout << s << " "; 
+            }
+            fout << ";\n";
         }
+        fout << "\n}\n";
     }
 
     fout.close();
     //* Overwrite the file with our existing changes
     std::remove(filePath.c_str());
     std::rename(tempFile.c_str(), filePath.c_str());
+}
+
+std::string ruleType_ToString(ruleType rt) {
+    if (rt == 0) { 
+        return ".";
+    } else if (rt == 1) {
+        return "#";
+    }
+    
+    std::cerr << "Error, unknown ruleType: " << rt << std::endl;
 }
