@@ -71,4 +71,4 @@ h3 {
  Please make sure to update documentation as appropriate.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+CSS-Organizer is available under the [MIT](https://choosealicense.com/licenses/mit/) license. See LICENSE for details. 
