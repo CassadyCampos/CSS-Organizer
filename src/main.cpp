@@ -12,12 +12,12 @@
 #include <vector>
 #include <algorithm>
 #include <stdio.h>
+#include <ctype.h>
 #include <sstream>
 #include <filesystem>
 
 #include <Ruling.hpp>
 #include <Property.hpp>
-
 
 namespace fs = std::filesystem;
 
@@ -27,6 +27,10 @@ void printRulings();
 void sortRulings();
 
 bool compareRule(Ruling a, Ruling b) { 
+    //* Check if element so we can put those first
+    if (std::isalpha(a.getName()[0]) && !(std::isalpha(b.getName()[0]))) {
+        return true;
+    }
     return a.getName() < b.getName();
 }
 
