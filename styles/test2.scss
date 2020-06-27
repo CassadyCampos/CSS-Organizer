@@ -1,0 +1,37 @@
+// Import Bootstrap/KeyVu base functions and variables
+@import "~bootstrap/scss/functions";
+@import "../../../../assets/theme/variables";
+@import "../../../../assets/site-mixins";
+
+.kpi-block {
+    box-sizing: border-box;
+    border-left: solid 4px $info;
+    display: inline-flex;
+    flex-direction: column-reverse;
+    width: 49%;
+    padding-left: $spacer * .5;
+    margin-top: $spacer * 1;
+
+    @media (min-width: 768px) {
+        width: 32%;
+    }
+
+    @media (min-width: 992px) {
+        width: 24%;
+    }
+
+    @media (min-width: 1500px) {
+        width: 14%;
+    }
+}
+
+.kpi-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+kpi-card {
+    flex: 1;
+    display: flex;
+}
