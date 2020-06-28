@@ -37,8 +37,8 @@ bool compareRule(Ruling a, Ruling b) {
 std::string directory;
 std::string filePath = "";
 std::string tempFile = "temp.txt";
-const std::string CSS = "css";
 
+std::vector<std::string> stylesheets = {"css", "scss"};
 
 std::vector<Ruling> rulings;
 
@@ -52,13 +52,13 @@ int main() {
     for(auto& p: fs::recursive_directory_iterator(directory)) {
         rulings.clear();
 
-        //* We need to make sure it is a css file
+        //* We need to make sure it is a stylesheet
         //* TODO - We can extend this to other stylesheets such as scss
         std::string path = p.path();
         std::string fileExt = path.substr(path.find_last_of(".")+ 1);
         std::cout << path << ". . . . . . . . . . . . . . ";
 
-        if (fileExt == CSS) {
+        if (std::find(stylesheets.begin(), stylesheets.end(), fileExt) != stylesheets.end()) {
             std::fstream fin;
             filePath = p.path();
             fin.open(filePath);
